@@ -1,7 +1,8 @@
 import secrets
 from flask import Flask, render_template, redirect
-from forms import emergency_access
+from pygame.examples.cursors import color_cursor
 
+from forms import emergency_access
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_hex(16)
@@ -50,6 +51,18 @@ def login():
 def distribution():
     list_astronauts = ["Ридли Скотт", "Эндри Уир", "Марк Уотни"]
     return render_template('distribution.html', list_astronauts=list_astronauts)
+
+
+@app.route('/table/<string:sex>/<string:age>')
+def table(sex, age):
+    age = int(age)
+    if age < 255:
+        color = (0 + age, 0 + age, 255 - age) if sex == 'male' else (255 - age, 0 + age, 0 + age)
+    else:
+        color = (0, 0, 0)
+    image = "age_%21.png" if age < 21 else "age_21%.png"
+    return render_template('table.html', image=f"images/{image}", color=color)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
