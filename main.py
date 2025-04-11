@@ -1,6 +1,20 @@
-from flask import Flask, render_template, url_for
+import secrets
+from flask import Flask, render_template, redirect
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms.validators import DataRequired
+
+
+class LoginForm(FlaskForm):
+    id_astronaut = StringField('Id астронавта', validators=[DataRequired()])
+    astronaut_password = PasswordField('Пароль астронавта', validators=[DataRequired()])
+    id_captain = StringField('Id капитана', validators=[DataRequired()])
+    captain_password = PasswordField('Пароль капитана', validators=[DataRequired()])
+    submit = SubmitField('Войти')
+
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = secrets.token_hex(16)
 
 
 @app.route('/<string:title>')
@@ -32,6 +46,14 @@ def auto_answer():
                    "education": "выше среднего", "profession": "штурман марсохода", "sex": "male",
                    "motivation": "Всегда мечтал застрять на Марсе!", "ready": True}
     return render_template('auto_answer.html', dict=answer_dict, title=answer_dict["title"])
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        return redirect('/success')
+    return render_template('login.html', title='Аварийный доступ', form=form)
 
 
 if __name__ == '__main__':
