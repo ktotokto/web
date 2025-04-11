@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% set c = 'Каюта №' %}
+    <h3>Размешение по коютам</h3>
+    {% for astronaut in list_astronauts %}
+    {% if loop.first %}
+      <p>{{astronaut ~ ' - ' ~ c ~ loop.index ~ ' - капитан корабля'}}</p>
+    {% else %}
+      <p>{{astronaut ~ ' - ' ~ c ~ loop.index}}</p>
+    {% endif %}
+    {% endfor %}
+{% endblock %}

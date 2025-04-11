@@ -1,16 +1,6 @@
 import secrets
 from flask import Flask, render_template, redirect
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired
-
-
-class LoginForm(FlaskForm):
-    id_astronaut = StringField('Id астронавта', validators=[DataRequired()])
-    astronaut_password = PasswordField('Пароль астронавта', validators=[DataRequired()])
-    id_captain = StringField('Id капитана', validators=[DataRequired()])
-    captain_password = PasswordField('Пароль капитана', validators=[DataRequired()])
-    submit = SubmitField('Доступ')
+from forms import emergency_access
 
 
 app = Flask(__name__)
@@ -50,11 +40,16 @@ def auto_answer():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
+    form = emergency_access.LoginForm()
     if form.validate_on_submit():
         return redirect('/success')
     return render_template('login.html', title='Аварийный доступ', form=form)
 
+
+@app.route('/distribution')
+def distribution():
+    list_astronauts = ["Ридли Скотт", "Эндри Уир", "Марк Уотни"]
+    return render_template('distribution.html', list_astronauts=list_astronauts)
 
 if __name__ == '__main__':
     app.run(debug=True)
