@@ -10,7 +10,7 @@ class LoginForm(FlaskForm):
     astronaut_password = PasswordField('Пароль астронавта', validators=[DataRequired()])
     id_captain = StringField('Id капитана', validators=[DataRequired()])
     captain_password = PasswordField('Пароль капитана', validators=[DataRequired()])
-    submit = SubmitField('Войти')
+    submit = SubmitField('Доступ')
 
 
 app = Flask(__name__)
